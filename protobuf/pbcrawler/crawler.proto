@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package pbcrawler;
+option go_package="pbcrawler";
+
+// WebCrawler simple message
+message WebCrawlerRequest {
+    string name = 1;
+    string url = 2;
+}
+
+message WebCrawlerResponse {
+    bool status = 1;
+    string name = 2;
+    bytes payload = 3;
+}
+
+// Web Crawler batch messages
+message WebCrawlerBatchRequest {
+    message Request {
+        string name = 1;
+        string url = 2;
+    }
+    repeated Request requests = 1;
+}
+
+message WebCrawlerBatchResponse {
+    bool status = 1;
+    string name = 2;
+    bytes payload = 3;
+}
+
+// WebCrawler services
+service WebCrawlerService{
+    // Unary
+    rpc WebCrawler(WebCrawlerRequest) returns (WebCrawlerResponse) {};
+
+    // BiDi
+    rpc WebCrawlerBatch(stream WebCrawlerBatchRequest) returns (stream WebCrawlerBatchResponse) {};
+}
