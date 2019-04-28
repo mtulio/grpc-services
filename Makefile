@@ -26,7 +26,7 @@ go-init:
 # ###############
 PATH_PROTOB ?= ./protobuf
 PATH_LIB_GO ?= $(PWD)/src
-PROTOB_BUILD ?= pbcrawler/crawler.proto
+PROTOB_BUILD ?= crawler/crawler.proto
 
 pb-gen-go:
 	protoc --go_out=plugins=grpc:$(PATH_LIB_GO) $(PBFILE)

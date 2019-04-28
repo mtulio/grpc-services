@@ -8,7 +8,7 @@ import (
 	"log"
 	"net/http"
 
-	pb "github.com/mtulio/grpc-services/src/protobuf/pbcrawler"
+	pb "github.com/mtulio/grpc-services/src/protobuf/crawler"
 	"google.golang.org/grpc"
 )
 

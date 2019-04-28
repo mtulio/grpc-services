@@ -1,7 +1,7 @@
 syntax = "proto3";
 
-package pbcrawler;
-option go_package="pbcrawler";
+package crawler;
+option go_package="crawler";
 
 // WebCrawler simple message
 message WebCrawlerRequest {
