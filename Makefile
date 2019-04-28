@@ -3,7 +3,7 @@
 # ###############
 CPWD ?= $(PWD)
 BIN_PATH ?= ./cmd
-BIN_NAMES ?= crawlerd
+BIN_NAMES ?= crawlerd crawler-client grpc-server
 GO_FLAGS ?= GOOS=linux GOARCH=amd64
 
 build-bin:
@@ -12,8 +12,9 @@ build-bin:
 		echo -e "** Building cmd: $${CMD} **"; \
 		GOOS=linux GOARCH=amd64 \
 		$(GO_FLAGS)	go build -o $(CPWD)/bin/$${CMD}; \
-		test -d $(CPWD)/hack/$${CMD} && \
-			docker build -t $${CMD} -f $(CPWD)/hack/$${CMD}/Dockerfile .; \
+		# test -d $(CPWD)/hack/$${CMD} && \
+		# 	test $(docker stats >/dev/null |echo $?) && \
+		# 		docker build -t $${CMD} -f $(CPWD)/hack/$${CMD}/Dockerfile .; \
 	done
 	@cd $(CPWD)
 
