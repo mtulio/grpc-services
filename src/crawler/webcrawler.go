@@ -12,15 +12,17 @@ import (
 	"google.golang.org/grpc"
 )
 
-type server struct{}
+type service struct{}
 
+// Register the service on the gRPC server
 func Register(gs *grpc.Server) error {
-	pb.RegisterWebCrawlerServiceServer(gs, &server{})
+	pb.RegisterWebCrawlerServiceServer(gs, &service{})
 
 	return nil
 }
 
-func (*server) WebCrawler(ctx context.Context, req *pb.WebCrawlerRequest) (*pb.WebCrawlerResponse, error) {
+// WebCrawler is the gRPC server interface implementation.
+func (*service) WebCrawler(ctx context.Context, req *pb.WebCrawlerRequest) (*pb.WebCrawlerResponse, error) {
 	fmt.Printf("WebCrawler function was invoked with %v\n", req)
 	name := req.GetName()
 	url := req.GetUrl()
@@ -36,13 +38,13 @@ func (*server) WebCrawler(ctx context.Context, req *pb.WebCrawlerRequest) (*pb.W
 	if response.StatusCode == http.StatusOK {
 		bodyBytes, err = ioutil.ReadAll(response.Body)
 		if err != nil {
-			bodyString = fmt.Sprintf("error, statusCode: %s", response.StatusCode)
+			bodyString = fmt.Sprintf("error, statusCode: %d", response.StatusCode)
 		} else {
 			bodyString = string(bodyBytes)
 			status = true
 		}
 	} else {
-		bodyString = fmt.Sprintf("error, statusCode: %s", response.StatusCode)
+		bodyString = fmt.Sprintf("error, statusCode: %d", response.StatusCode)
 	}
 
 	fmt.Println("Body length: ", len(bodyString))
@@ -54,7 +56,8 @@ func (*server) WebCrawler(ctx context.Context, req *pb.WebCrawlerRequest) (*pb.W
 	return res, nil
 }
 
-func (*server) WebCrawlerBatch(stream pb.WebCrawlerService_WebCrawlerBatchServer) error {
+// WebCrawlerBatch is the gRPC server interface implementation.
+func (*service) WebCrawlerBatch(stream pb.WebCrawlerService_WebCrawlerBatchServer) error {
 	fmt.Printf("WebCrawlerBatch function was invoked with a streaming request\n")
 
 	for {
@@ -107,20 +110,19 @@ func crawler(url string) (string, bool) {
 	var bodyBytes []byte
 
 	if err != nil {
-		// log.Fatal(err)
-		return fmt.Sprintf("error, statusCode: %w", err), status
+		return fmt.Sprintf("error, statusCode: %s", err), status
 	}
 	defer response.Body.Close()
 	if response.StatusCode == http.StatusOK {
 		bodyBytes, err = ioutil.ReadAll(response.Body)
 		if err != nil {
-			bodyString = fmt.Sprintf("error, statusCode: %s", response.StatusCode)
+			bodyString = fmt.Sprintf("error, statusCode: %d", response.StatusCode)
 		} else {
 			bodyString = string(bodyBytes)
 			status = true
 		}
 	} else {
-		bodyString = fmt.Sprintf("error, statusCode: %s", response.StatusCode)
+		bodyString = fmt.Sprintf("error, statusCode: %d", response.StatusCode)
 	}
 
 	return bodyString, status
