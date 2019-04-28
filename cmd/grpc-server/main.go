@@ -14,8 +14,6 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-type server struct{}
-
 func main() {
 	serverPort, err := strconv.Atoi(os.Getenv("GRPC_SERVER_PORT"))
 	if err != nil {

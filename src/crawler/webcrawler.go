@@ -66,6 +66,10 @@ func (*server) WebCrawlerBatch(stream pb.WebCrawlerService_WebCrawlerBatchServer
 			log.Fatalf("Error while reading client stream: %v", err)
 			return err
 		}
+		if len(req.Requests) == 0 {
+			return nil
+		}
+		fmt.Println(len(req.Requests))
 
 		cnResponse := make(chan *pb.WebCrawlerBatchResponse, 5)
 		lenBatchReq := len(req.GetRequests())
